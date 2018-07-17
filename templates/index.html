@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>房屋价格预测系统</title>
+    <script src="static/jquery.min.js">
+    </script>
+<script>
+function myform1() {
+    var a = document.getElementById('dist').value;
+    $.ajax({
+        type: "GET",
+        url : "/myform1",
+        data: {a},
+        success:function(data){
+            $("p").append("<b>根据区域预测的价格为："+data+"元每月</b><br>");
+        }
+    })
+}
+function myform2() {
+    var b = document.getElementById('size').value;
+    $.ajax({
+        type: "GET",
+        url : "/myform2",
+        data: {b},
+        success:function(data){
+            $("p").append("<b>根据面积预测的价格为："+data+"元每月</b><br>");
+        }
+    })
+}
+function myform3() {
+    var c = document.getElementById('size1').value;
+    var d = document.getElementById('hnum').value;
+    $.ajax({
+        type: "GET",
+        url : "/myform3",
+        data: {c,d},
+        success:function(data){
+            $("p").append("<b>根据面积和房屋数量预测的价格为："+data+"元每月</b><br>");
+        }
+    })
+}
+$(document).ready(function(){
+	$(".btn1").click(function(){
+		$.get("/getdata",function(data, status){
+            $("p").append(" <b>采集的数据:"+data+"条</b><br>");
+		});
+	});
+
+    $(".btn2").click(function(){
+		$.get("/exportdata",function(data, status){
+			$("p").append("<b>"+data+"</b><br>");
+		});
+	});
+
+    $(".btn3").click(function(){
+		$.get("/cleandata",function(data, status){
+			$("p").append("<b>"+data+"</b><br>");
+		});
+	});
+});
+</script>
+
+</head>
+<body>
+    <h1>房屋价格预测系统</h1>
+    <button class="btn1">采集数据</button>
+    <button class="btn2">导出数据</button>
+    <button class="btn3">加工数据</button> <br/><br/>
+    <h1>预测</h1>
+    <form action="/myform1" method='post'>
+        <select id="dist">
+            <option value="0">芙蓉区</option>
+            <option value="1">开福区</option>
+            <option value="2">天心区</option>
+            <option value="3">岳麓区</option>
+            <option value="4">雨花区</option>
+            </select>
+            <input type="button" onclick = "myform1()" id="pred1"  value="预测" />
+    </form>
+    <form action="/myform2" method='post'>
+        面积: <input type="text" name="size" value="" id="size"><br>
+        <input type="button" onclick = "myform2()" id="pred2"  value="预测"/>
+    </form>
+    <form action="/myform3" method='post'>
+        面积: <input type="text" name="size" value="" id="size1"><br>
+        房屋数量: <input type="text" name="hnum" value="" id="hnum"><br>
+        <input type="button" onclick = "myform3()" id="pred3"  value="预测"/>
+    </form>
+    <p>结果:</p>
+    
+</body>
+</html>
